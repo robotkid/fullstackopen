@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Header = (props) => {
+const Header = ({course}) => {
   return (
     <div>
-      <h1>{props.course}</h1>
+      <h1>{course.name}</h1>
     </div>
     )
   }
@@ -18,18 +18,22 @@ const Header = (props) => {
   const Course = ({course}) => {
     return (
       <div>
-        <h1>{course.name}</h1>
+        <Header course={course} />
         <Content course={course} />
+        <Total course={course} />
       </div>
       )
     }
     
-    const Total = (props) => {
-      const total = props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises
+    const Total = ({course}) => {
+      const total = course.parts.reduce((acc, cur) => {
+        return (acc + cur.exercises)
+      }, 0)
+
       return (
         <div>
           <p>
-            Number of exercises {total}
+            <strong>total of {total} exercises</strong>
           </p>
         </div>
         )
