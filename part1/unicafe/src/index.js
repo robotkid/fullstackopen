@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const FeedbackButtons = ({buttons}) => {
+
+const Button = ({ name, handleClick }) => {
   return (
-    <div>
-      <button onClick={buttons[0].handleClick}>
-        {buttons[0].name}
-      </button>
-      <button onClick={buttons[1].handleClick}>
-        {buttons[1].name}
-      </button>
-      <button onClick={buttons[2].handleClick}>
-        {buttons[2].name}
-      </button>
-    </div>
+    <button onClick={handleClick}>
+      {name}
+    </button>
+  )
+}
+
+const Statistic = ({text, value}) => {
+  return (
+    <p>{text} {value}</p>
   )
 }
 
@@ -32,12 +31,12 @@ const Statistics = ({good, neutral, bad}) => {
 
   return (
     <div>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {totalClicks}</p>
-      <p>average {average}</p>
-      <p>positive {positivePercentage} %</p>
+      <Statistic text="good" value={good} />
+      <Statistic text="neutral" value={neutral} />
+      <Statistic text="bad" value={bad} />
+      <Statistic text="all" value={totalClicks} />
+      <Statistic text="average" value={average} />
+      <Statistic text="positive" value = {positivePercentage + " %"} />
     </div>
   )
 }
@@ -50,25 +49,16 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
-  const buttons = [
-    {
-      name: "good",
-      handleClick: () => setGood(good + 1)
-    },
-    {
-      name: "neutral",
-      handleClick: () => setNeutral(neutral + 1)
-    },
-    {
-      name: "bad",
-      handleClick: () => setBad(bad + 1)
-    }
-  ]
+  const goodClick = () => setGood(good + 1)
+  const neutralClick = () => setNeutral(neutral + 1)
+  const badClick = () => setBad(bad + 1)
 
   return (
     <div>
       <h1>give feedback</h1>
-      <FeedbackButtons buttons={buttons} />
+      <Button name="good" handleClick={goodClick} />
+      <Button name="neutral" handleClick={neutralClick} />
+      <Button name="bad" handleClick={badClick} />
       <h1>statistics</h1>
       <Statistics good={good} neutral={neutral} bad={bad}/>
      </div>
