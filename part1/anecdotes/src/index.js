@@ -6,6 +6,7 @@ const App = (props) => {
   for (let i=0; i<props.anecdotes.length; initialPoints[i++] = 0);
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(initialPoints)
+  const [mostVotes, setMostVotes] = useState(0)
 
   const randomise = () => {
     setSelected(Math.floor(Math.random() * props.anecdotes.length))
@@ -15,10 +16,14 @@ const App = (props) => {
       const newPoints = points.slice()
       newPoints[selected] += 1
       setPoints(newPoints)
+      if (newPoints[selected] > newPoints[mostVotes]) {
+          setMostVotes(selected)
+      }
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>
         {props.anecdotes[selected]}
       </p>
@@ -31,6 +36,8 @@ const App = (props) => {
       <button onClick={vote}>
         vote
       </button>
+      <h1>Anecdote with most votes</h1>
+      <p>{props.anecdotes[mostVotes]}</p>
     </div>
   )
 }
