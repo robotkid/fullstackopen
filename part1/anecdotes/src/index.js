@@ -2,10 +2,19 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const App = (props) => {
+  let initialPoints = []
+  for (let i=0; i<props.anecdotes.length; initialPoints[i++] = 0);
   const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState(initialPoints)
 
   const randomise = () => {
     setSelected(Math.floor(Math.random() * props.anecdotes.length))
+  }
+
+  const vote = () => {
+      const newPoints = points.slice()
+      newPoints[selected] += 1
+      setPoints(newPoints)
   }
 
   return (
@@ -13,8 +22,14 @@ const App = (props) => {
       <p>
         {props.anecdotes[selected]}
       </p>
+      <p>
+          Has {points[selected]} votes
+      </p>
       <button onClick={randomise}>
         next anecdote
+      </button>
+      <button onClick={vote}>
+        vote
       </button>
     </div>
   )
