@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom'
 const FeedbackButtons = ({buttons}) => {
   return (
     <div>
-      <h1>give feedback</h1>
       <button onClick={buttons[0].handleClick}>
         {buttons[0].name}
       </button>
@@ -23,8 +22,19 @@ const Statistics = ({good, neutral, bad}) => {
   let average = (good - bad) / totalClicks
   let positivePercentage = good / totalClicks * 100
   
+  if (totalClicks === 0) {
+    return (
+      <div>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
+
   return (
     <div>
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
       <p>all {totalClicks}</p>
       <p>average {average}</p>
       <p>positive {positivePercentage} %</p>
@@ -54,14 +64,12 @@ const App = () => {
       handleClick: () => setBad(bad + 1)
     }
   ]
-  
+
   return (
     <div>
+      <h1>give feedback</h1>
       <FeedbackButtons buttons={buttons} />
       <h1>statistics</h1>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
       <Statistics good={good} neutral={neutral} bad={bad}/>
      </div>
   )
