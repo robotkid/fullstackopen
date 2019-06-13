@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
-
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchItem, setSearchItem ] = useState('')
+  const [ notificationMessage, setNotificationMessage ] = useState(null)
+  const [ isError, setIsError ] = useState(false)
 
   useEffect(() => {
     personService
@@ -30,6 +32,7 @@ const App = () => {
         const newPersons = [...persons]
         newPersons[index] = returnedPerson
         setPersons(newPersons)
+        notify(`Changed number for ${newName}`, false)
       })
   }
 
@@ -48,9 +51,16 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
-          setNewNumber('')    
+          setNewNumber('')
+          notify(`Added ${returnedPerson.name}`, false)
         })
     }
+  }
+
+  const notify = (message, error) => {
+    setNotificationMessage(message)
+    setIsError(error)
+    setTimeout(() => setNotificationMessage(null), 3000)    
   }
 
   const handleNameChange = (event) => {
@@ -67,16 +77,20 @@ const App = () => {
 
   const handleDelete = (id) => () => {
     const personIndex = persons.findIndex(p => p.id === id)
-    if (window.confirm(`Delete ${persons[personIndex].name}`))
-    personService.del(id).then( () => {
+    const personName = persons[personIndex].name
+    if (window.confirm(`Delete ${personName}`))
+    personService.del(id).then( () => {  
       const updatedPersons = [...persons]
       updatedPersons.splice(personIndex, 1)
       setPersons(updatedPersons)
+      notify(`Deleted ${personName}`, false)
     })
   }
 
   return (
     <div>
+      <Notification message={notificationMessage} error={isError} />
+
       <h2>Phonebook</h2>
 
       <Filter searchItem={searchItem} changeHandler={handleSearchChange} />
