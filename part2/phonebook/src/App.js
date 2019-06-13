@@ -53,6 +53,16 @@ const App = () => {
     setSearchItem(event.target.value)
   }
 
+  const handleDelete = (id) => () => {
+    const personIndex = persons.findIndex(p => p.id === id)
+    if (window.confirm(`Delete ${persons[personIndex].name}`))
+    personService.del(id).then( () => {
+      const updatedPersons = [...persons]
+      updatedPersons.splice(personIndex, 1)
+      setPersons(updatedPersons)
+    })
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -69,7 +79,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} deleteHandler={handleDelete} />
 
     </div>
   )

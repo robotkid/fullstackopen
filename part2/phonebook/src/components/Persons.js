@@ -1,12 +1,15 @@
 import React from 'react'
 
 
-const Person = ({name, number}) =>
-  <p>{name} {number}</p>
+const Person = ({person, deleteHandler}) =>
+  <p>{person.name} {person.number} <button onClick={deleteHandler(person.id)}>delete</button></p>
 
 
 const Persons = (props) =>
-  props.persons.map(p => <Person key={p.name} name={p.name} number={p.number} />)
+  props.persons.map(p => <Person
+                            key={p.name}
+                            person={p}
+                            deleteHandler={props.deleteHandler} />)
 
 
 export default Persons
