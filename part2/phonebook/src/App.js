@@ -34,6 +34,9 @@ const App = () => {
         setPersons(newPersons)
         notify(`Changed number for ${newName}`, false)
       })
+      .catch(error => {
+        notify(`${newName} was already removed from the server`, true)
+      })
   }
 
   const addName = (event) => {
@@ -79,12 +82,13 @@ const App = () => {
     const personIndex = persons.findIndex(p => p.id === id)
     const personName = persons[personIndex].name
     if (window.confirm(`Delete ${personName}`))
-    personService.del(id).then( () => {  
-      const updatedPersons = [...persons]
-      updatedPersons.splice(personIndex, 1)
-      setPersons(updatedPersons)
-      notify(`Deleted ${personName}`, false)
-    })
+    personService.del(id)
+      .then( () => {  
+        const updatedPersons = [...persons]
+        updatedPersons.splice(personIndex, 1)
+        setPersons(updatedPersons)
+        notify(`Deleted ${personName}`, false)
+      })
   }
 
   return (
