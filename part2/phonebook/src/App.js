@@ -23,10 +23,22 @@ const App = () => {
   const personsToShow =
     persons.filter(p => p.name.toUpperCase().includes(searchItem.toUpperCase()))
 
+  const updateNumber = (index) => {
+    personService
+      .update(persons[index].id, {...persons[index], number:newNumber})
+      .then( (returnedPerson) => {
+        const newPersons = [...persons]
+        newPersons[index] = returnedPerson
+        setPersons(newPersons)
+      })
+  }
+
   const addName = (event) => {
     event.preventDefault()
-    if (persons.some(p => p.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+    const replaceMessage = `${newName} is already in the phonebook. Replace the old number with a new one?`
+    const existingIndex = persons.findIndex(p => p.name === newName)
+    if (existingIndex >= 0 && window.confirm(replaceMessage)) {
+      updateNumber(existingIndex)
     }
     else {
       const newPerson = {name: newName, number: newNumber}
